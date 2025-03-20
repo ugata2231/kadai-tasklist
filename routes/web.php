@@ -14,5 +14,14 @@ use App\Http\Controllers\TasksController;
 |
 */
 
-Route::get('/', [TasksController::class, 'index']);
-Route::resource('messages', TasksController::class);
+Route::get('/', function () {
+    return view('auth.login');
+});
+
+Route::get('/dashboard', [TasksController::class, 'index'])->middleware(['auth'])->name('index');
+
+Route::middleware('auth')->group(function () {
+    Route::resource('messages', TasksController::class);
+});
+
+require __DIR__.'/auth.php';
