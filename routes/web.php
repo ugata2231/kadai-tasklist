@@ -21,7 +21,7 @@ Route::get('/', function () {
 Route::get('/dashboard', [TasksController::class, 'index'])->middleware(['auth'])->name('index');
 
 Route::middleware('auth')->group(function () {
-    Route::resource('messages', TasksController::class);
+    Route::resource('tasks', TasksController::class);
 });
 
 require __DIR__.'/auth.php';

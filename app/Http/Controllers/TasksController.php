@@ -8,81 +8,84 @@ use App\Models\Task;
 
 class TasksController extends Controller
 {
-    // getでmessages/にアクセスされた場合の「一覧表示処理」
+    // getでtasks/にアクセスされた場合の「一覧表示処理」
     public function index()
     {
         if (\Auth::check()) {
             $user = \Auth::user();
-            // メッセージ一覧を取得
-            $messages = $user->tasks()->paginate(10);
+            // タスク一覧を取得
+            $tasks = $user->tasks()->paginate(10);
 
-            // メッセージ一覧ビューでそれを表示
-            return view('messages.index', [
-                'messages' => $messages,
+            // タスク一覧ビューでそれを表示
+            return view('tasks.index', [
+                'tasks' => $tasks,
             ]);
         }
     }
 
-    // getでmessages/createにアクセスされた場合の「新規登録画面表示処理」
+    // getでtasks/createにアクセスされた場合の「新規登録画面表示処理」
     public function create()
     {
-        $message = new Task;
+        $task = new Task;
 
-        // メッセージ作成ビューを表示
-        return view('messages.create', [
-            'message' => $message,
+        // タスク作成ビューを表示
+        return view('tasks.create', [
+            'task' => $task,
         ]);
     }
 
-    // postでmessages/にアクセスされた場合の「新規登録処理」
+    // postでtasks/にアクセスされた場合の「新規登録処理」
     public function store(Request $request)
     {
         // バリデーション
         $request->validate([
-        'content' => 'required',
-        'status' => 'required|max:10',
+            'content' => 'required',
+            'status' => 'required|max:10',
         ]);
 
-        // メッセージを作成
-        $message = new Task;
-        $message->user_id = auth()->id();
-        $message->content = $request->content;
-        $message->status = $request->status;
-        $message->save();
+        // タスクを作成
+        $task = new Task;
+        $task->user_id = auth()->id();
+        $task->content = $request->content;
+        $task->status = $request->status;
+        $task->save();
 
         // トップページへリダイレクトさせる
         return redirect('/dashboard');
     }
 
-    // getでmessages/idにアクセスされた場合の「取得表示処理」
+    // getでtasks/idにアクセスされた場合の「取得表示処理」
     public function show(string $id)
     {
-        // idの値でメッセージを検索して取得
-        $message = Task::findOrFail($id);
+        // idの値でタスクを検索して取得
+        $task = Task::findOrFail($id);
 
-        if (\Auth::id() === $message->user_id) {
-            // メッセージ詳細ビューでそれを表示
-            return view('messages.show', [
-                'message' => $message,
-            ]);
-         } else {
+        if (\Auth::id() !== $task->user_id) {
             return redirect('/dashboard');
         }
-    }
-
-    // getでmessages/id/editにアクセスされた場合の「更新画面表示処理」
-    public function edit(string $id)
-    {
-        // idの値でメッセージを検索して取得
-        $message = Task::findOrFail($id);
-
-        // メッセージ編集ビューでそれを表示
-        return view('messages.edit', [
-            'message' => $message,
+        // タスク詳細ビューでそれを表示
+        return view('tasks.show', [
+            'task' => $task,
         ]);
     }
 
-    // putまたはpatchでmessages/idにアクセスされた場合の「更新処理」
+    // getでtasks/id/editにアクセスされた場合の「更新画面表示処理」
+    public function edit(string $id)
+    {
+        // idの値でタスクを検索して取得
+        $task = Task::findOrFail($id);
+
+        if (\Auth::id() !== $task->user_id) {
+            return redirect('/dashboard');
+        }
+
+        // タスク編集ビューでそれを表示
+        return view('tasks.edit', [
+            'task' => $task,
+        ]);
+    }
+
+    // putまたはpatchでtasks/idにアクセスされた場合の「更新処理」
     public function update(Request $request, string $id)
     {
         // バリデーション
@@ -91,24 +94,34 @@ class TasksController extends Controller
             'status' => 'required|max:10',
         ]);
 
-        // idの値でメッセージを検索して取得
-        $message = Task::findOrFail($id);
-        // メッセージを更新
-        $message->content = $request->content;
-        $message->status = $request->status;
-        $message->save();
+        // idの値でタスクを検索して取得
+        $task = Task::findOrFail($id);
+
+        if (\Auth::id() !== $task->user_id) {
+            return redirect('/dashboard');
+        }
+
+        // タスクを更新
+        $task->content = $request->content;
+        $task->status = $request->status;
+        $task->save();
 
         // トップページへリダイレクトさせる
         return redirect('/dashboard');
     }
 
-    // deleteでmessages/idにアクセスされた場合の「削除処理」
+    // deleteでtasks/idにアクセスされた場合の「削除処理」
     public function destroy(string $id)
     {
-        // idの値でメッセージを検索して取得
-        $message = Task::findOrFail($id);
-        // メッセージを削除
-        $message->delete();
+        // idの値でタスクを検索して取得
+        $task = Task::findOrFail($id);
+
+        if (\Auth::id() !== $task->user_id) {
+            return redirect('/dashboard');
+        }
+
+        // タスクを削除
+        $task->delete();
 
         // トップページへリダイレクトさせる
         return redirect('/dashboard');

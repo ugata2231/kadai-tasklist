@@ -6,7 +6,7 @@
         <h2 class="text-lg">タスク一覧</h2>
     </div>
 
-    @if (isset($messages))
+    @if (isset($tasks))
         <table class="table table-zebra w-full my-4">
             <thead>
                 <tr>
@@ -16,11 +16,11 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($messages as $message)
+                @foreach ($tasks as $task)
                 <tr>
-                    <td><a class="link link-hover text-info" href="{{ route('messages.show', $message->id) }}">{{ $message->id }}</a></td>
-                    <td>{{ $message->content }}</td>
-                    <td>{{ $message->status }}</td>
+                    <td><a class="link link-hover text-info" href="{{ route('tasks.show', $task->id) }}">{{ $task->id }}</a></td>
+                    <td>{{ $task->content }}</td>
+                    <td>{{ $task->status }}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -28,6 +28,6 @@
     @endif
 
     {{-- タスク作成ページへのリンク --}}
-    <a class="btn btn-primary" href="{{ route('messages.create') }}">新規タスクの投稿</a>
+    <a class="btn btn-primary" href="{{ route('tasks.create') }}">新規タスクの投稿</a>
 
 @endsection
