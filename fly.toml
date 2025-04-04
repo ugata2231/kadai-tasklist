@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for tasklist-spring-surf-8944 on 2025-03-08T11:06:00+09:00
+# fly.toml app configuration file generated for tasklist-delicate-forest-5871 on 2025-04-04T10:56:17+09:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = 'tasklist-spring-surf-8944'
+app = 'tasklist-delicate-forest-5871'
 primary_region = 'nrt'
 console_command = 'php /var/www/html/artisan tinker'
 
@@ -13,14 +13,14 @@ console_command = 'php /var/www/html/artisan tinker'
     PHP_VERSION = '8.3'
 
 [env]
+  APP_DEBUG = 'false'
   APP_ENV = 'production'
-  APP_URL = 'https://tasklist-spring-surf-8944.fly.dev/'
   APP_NAME = 'Laravel'
-  APP_DEBUG = false
+  APP_URL = 'https://delicate-forest-5871.fly.dev/'
   DB_CONNECTION = 'pgsql'
-  DB_HOST = 'aws-0-ap-northeast-1.pooler.supabase.com'
-  DB_PORT = 6543
   DB_DATABASE = 'postgres'
+  DB_HOST = 'aws-0-ap-northeast-1.pooler.supabase.com'
+  DB_PORT = '6543'
   DB_USERNAME = 'postgres.imykjjftnwnyvjriwxmj'
   LOG_CHANNEL = 'stderr'
   LOG_LEVEL = 'info'
@@ -31,7 +31,7 @@ console_command = 'php /var/www/html/artisan tinker'
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = true
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
   processes = ['app']
